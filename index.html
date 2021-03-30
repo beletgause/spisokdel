@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Список дел</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/font-awesome_min.css">
+    <script type="text/javascript" src="js/script.js"></script>
+</head>
+<body>
+<header>
+    <div class="head">
+        <div class="brandName">
+            ToDo List
+        </div>
+        <div class="navBar">
+            <button class="createNew fa fa-pencil" onclick="showForm()"></button>
+        </div>
+    </div>
+</header>
+<h1 id="header">Список задач</h1>
+<div class="">
+<button class="btn-info actionBtn" id="0" onclick="showCategory(this)">Активные</button>
+<button class="btn-info actionBtn" id="1" onclick="showCategory(this)">Выполненные</button>
+</div>
+<section id="section">
+
+<!--    <div class="elem">-->
+<!--        <div class="name podElem"><b>ABOBA</b></div>-->
+<!--        <div class="date podElem">21.21.21</div>-->
+<!--        <div class="time podElem">12:22</div>-->
+<!--        <div class="check podElem">V</div>-->
+<!--        <div class="actions podElem">-->
+<!--            <button class="actionBtn btn-info fa fa-edit"></button>-->
+<!--            <button class="actionBtn btn-danger fa fa-trash-o"></button>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+</section>
+
+<section id="section2" class="section2 hidden">
+
+</section>
+<div class="createForm hidden" id="createForm">
+    <div class="formHeader"><b id="formHeader">Создание задачи</b></div>
+    <input type="text" id="name" class="inputName createInput" placeholder="Задача">
+    <input type="datetime-local"  id="date" class="dateInput createInput"  min="2021-03-27"  >
+    <button class="createNew createButton" id="createButton" onclick="addNew()">Добавить</button>
+
+    <div class="errors" id="errors"></div>
+</div>
+
+<footer>
+<div class="footer">pepega</div>
+</footer>
+</body>
+</html>
