@@ -1,10 +1,13 @@
 var name = '';
 var date = '';
+var errorPod=false;
 var check=false;
 var show = false;
 var errors = '';
+var countPod=0;
 var now = new Date();
 var all = [];
+var podzad=[];
 var count = localStorage.length / 3;
 if (!localStorage.getItem('all')) {
     localStorage.setItem('all', '[]');
@@ -31,7 +34,10 @@ function deleteElem(obj) {
 
 function editElem(obj) {
     //1-name 2-date
+
+
     getAll();
+
     showForm();
     document.getElementById('formHeader').textContent='Изменение задачи';
     document.getElementById('name').value = all[obj.id][1];
@@ -40,6 +46,22 @@ function editElem(obj) {
     var newElem = document.createElement("div");
     newElem.innerHTML='<button class="createNew createButton" id="'+obj.id+'" onclick="editElemReplace(this)">Изменить</button>';
     document.getElementById('createForm').insertBefore(newElem, null);
+    if (all[obj.id][4]!==[]){
+        document.getElementById('removePodzadacha').classList.remove('hidden');
+        for(var i=0;i<all[obj.id][4].length;i++){
+            var newDivPodzad=document.createElement('input');
+            newDivPodzad.classList.add('createInput','podzadInput');
+            newDivPodzad.id='podzad'+i;
+            newDivPodzad.value=all[obj.id][4][i];
+
+            document.getElementById('podzadachi').insertBefore(newDivPodzad,null);
+
+
+
+        }
+
+    }
+
 
 }
 
@@ -80,12 +102,35 @@ function editElemReplace(obj) {
         // }
 
     }
+    podzad=[];
+    errorPod=false;
+    for (var i=0;i<document.querySelectorAll('input.podzadInput').length;i++){
+
+        if (document.getElementById('podzad'+i)){
+        document.getElementById('podzad'+i).classList.remove('area-invalid');
+        if (document.getElementById('podzad'+i).value===''){
+            errorPod=true;
+            document.getElementById('podzad'+i).classList.add('area-invalid');
+        }
+        else{
+            podzad.push(document.getElementById('podzad'+i).value);
+        }
+    }
+    }
+    if (errorPod){
+        if (errors === '') {
+            errors = 'Подзадачи не могут быть пустыми.';
+        } else {
+            errors = errors + '<br>Подзадачи не могут быть пустыми.';
+        }
+    }
 
     if (errors === '') {
         newCount();
         getAll();
         all[obj.id][1]=name;
         all[obj.id][2]=date;
+        all[obj.id][4]=podzad;
         setAll();
         showAll();
         showForm();
@@ -111,6 +156,43 @@ function splitDate(string, separator, i) {
     return arrStr[i];
 }
 
+function removeAllPodzadacha() {
+if (document.querySelectorAll('input.podzadInput').length!==0){
+    while(document.getElementById(`podzadachi`).lastChild!==document.getElementById(`podzadachi`).firstChild){
+        document.getElementById(`podzadachi`).lastChild.remove();
+    }
+    document.getElementById(`podzadachi`).lastChild.remove();
+    document.getElementById(`createForm`).lastChild.remove();
+    countPod=0;
+}
+
+}
+
+function removePodzadacha() {
+    if (document.getElementById(`podzadachi`).lastChild===document.getElementById(`podzadachi`).firstChild){
+        document.getElementById(`podzadachi`).lastChild.remove();
+        document.getElementById(`createForm`).lastChild.remove();
+        countPod=0;
+    }
+    else{
+        document.getElementById(`podzadachi`).lastChild.remove();
+    }
+}
+
+function addPod() {
+    countPod+=1;
+
+    var newDivPodzad=document.createElement('input');
+    newDivPodzad.classList.add('createInput','podzadInput');
+    newDivPodzad.id='podzad'+countPod;
+
+
+    document.getElementById('podzadachi').insertBefore(newDivPodzad,null);
+
+
+
+}
+
 function showAll() {
     var section = document.getElementById('section');
     var section2 = document.getElementById('section2');
@@ -127,11 +209,24 @@ function showAll() {
         var newPodDiv1 = document.createElement("div");
         var newPodDiv2 = document.createElement("div");
         var newPodDiv3 = document.createElement("div");
+        var newPodDiv4 = document.createElement("div");
         newDiv.classList.add('elem');
         newPodDiv1.classList.add('name', 'podElem');
 
         newPodDiv2.classList.add('date', 'podElem');
         newPodDiv3.classList.add('actions', 'podElem');
+        newPodDiv4.classList.add('podZad', 'podElem');
+        if (all[i][4]!==[]){
+            for (var l=0;l<all[i][4].length;l++){
+                if (l===0){
+                    var podzad=all[i][4][l];
+                }
+                else{
+                    podzad=podzad+', '+all[i][4][l];
+                }
+            }
+            newPodDiv4.innerHTML=podzad;
+        }
         newPodDiv1.innerHTML = '<b>' + all[i][1] + '</b>';
         if (all[i][2] !== '') {
             newPodDiv2.innerHTML = checkDate(all[i][2]);
@@ -141,7 +236,7 @@ function showAll() {
             newPodDiv1.classList.add('check');
             document.getElementById('section2'
             ).insertBefore(newDiv, null);
-            newPodDiv3.innerHTML = '</button><button onclick="deleteElem(this)" class="actionBtn btnDelete btn-danger fa fa-trash-o" id="' + i + '">';
+            newPodDiv3.innerHTML = '<button onclick="deleteElem(this)" class="actionBtn btnDelete btn-danger fa fa-trash-o" id="' + i + '"></button>';
             newDiv.insertBefore(newPodDiv1, null);
 
         }
@@ -152,8 +247,9 @@ function showAll() {
             newDiv.insertBefore(newPodDiv1, null);
             newDiv.insertBefore(newPodDiv2, null);
         }
-
+        newDiv.insertBefore(newPodDiv4,null);
         newDiv.insertBefore(newPodDiv3, null);
+
     }
 }
 function checkDate(date) {
@@ -196,11 +292,16 @@ function checkDate(date) {
 }
 
 function showForm() {
+    while (document.getElementById('podzadachi').firstChild){
+        document.getElementById('podzadachi').firstChild.remove();
+    }
+    document.getElementById('removePodzadacha').classList.add('hidden');
     document.getElementById('createButton').classList.remove('hidden');
-    if (document.getElementById('createForm').lastChild.textContent === 'Изменить') {
+    if (document.getElementById('formHeader').textContent === 'Изменение задачи') {
         document.getElementById('createForm').lastChild.remove();
         document.getElementById('formHeader').textContent='Создание задачи';
     }
+
     if (!show) {
         document.getElementById('createForm').classList.remove('hidden');
         show = true;
@@ -209,6 +310,8 @@ function showForm() {
         show = false;
     }
 }
+
+
 
 function addNew() {
     errors = '';
@@ -247,6 +350,26 @@ function addNew() {
         // }
 
     }
+    podzad=[];
+    errorPod=false;
+    for (var i=0;i<document.querySelectorAll('input.podzadInput').length;i++){
+        var k=i+1;
+        document.getElementById('podzad'+k).classList.remove('area-invalid');
+        if (document.getElementById('podzad'+k).value===''){
+            errorPod=true;
+            document.getElementById('podzad'+k).classList.add('area-invalid');
+        }
+        else{
+            podzad.push(document.getElementById('podzad'+k).value);
+        }
+    }
+    if (errorPod){
+        if (errors === '') {
+            errors = 'Подзадачи не могут быть пустыми.';
+        } else {
+            errors = errors + '<br>Подзадачи не могут быть пустыми.';
+        }
+    }
 
     if (errors === '') {
         newCount();
@@ -256,6 +379,7 @@ function addNew() {
             name,
             date,
             check,
+            podzad,
         ];
         count = count + 1;
         all.push(elem);
@@ -265,6 +389,7 @@ function addNew() {
         // localStorage.setItem('date'+count, date);
         // localStorage.setItem('time'+count, time);
         showForm();
+        removeAllPodzadacha();
     }
     document.getElementById('errors').innerHTML = errors;
 }

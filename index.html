@@ -6,8 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Список дел</title>
-    <link rel="stylesheet" href="css/style.css">
+
     <link rel="stylesheet" href="css/font-awesome_min.css">
+    <link rel="stylesheet" href="css/style.css">
     <script type="text/javascript" src="js/script.js"></script>
 </head>
 <body>
@@ -48,9 +49,14 @@
     <div class="formHeader"><b id="formHeader">Создание задачи</b></div>
     <input type="text" id="name" class="inputName createInput" placeholder="Задача">
     <input type="datetime-local"  id="date" class="dateInput createInput"  min="2021-03-27"  >
+    <button class="createNew createButton" id="createPod" onclick="addPod()">Подзадача</button>
+
     <button class="createNew createButton" id="createButton" onclick="addNew()">Добавить</button>
+    <div class="podzadachi" id="podzadachi"></div>
 
     <div class="errors" id="errors"></div>
+    <button onclick="removePodzadacha()" class=" actionBtn btnDelete btn-danger fa fa-trash-o hidden" id="removePodzadacha" ></button>
+
 </div>
 
 <footer>

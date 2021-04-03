@@ -83,7 +83,9 @@ button:hover,button:active,button:focus{
     background-color: #c82333;
     border-color: #bd2130;
 }
-
+.dateInput{
+    min-height: 25px;
+}
 .btn-danger:focus, .btn-danger.focus {
     color: #fff;
     background-color: #c82333;
@@ -150,6 +152,7 @@ button:hover,button:active,button:focus{
 }
 .createForm{
     transition: 5s;
+    overflow: auto;
     max-width: 200px;
     display: flex;
     flex-direction: column;
@@ -171,9 +174,7 @@ button:hover,button:active,button:focus{
     border-radius: 10px;
     border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
-.hidden{
-    display: none;
-}
+
 .createInput{
     margin-bottom: 10px;
     border-radius: 10px;
@@ -245,4 +246,7 @@ button:hover{
 .btn-success:not(:disabled):not(.disabled):active:focus, .btn-success:not(:disabled):not(.disabled).active:focus,
 .show > .btn-success.dropdown-toggle:focus {
     box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
+}
+.hidden{
+    display: none;
 }
